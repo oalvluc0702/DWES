@@ -55,6 +55,18 @@ def redondea_puntuacion(puntuacion):
     return round(puntuacion, 2)
 
 def calcula_media_puntuaciones(grupos, *puntuaciones_extra, ag=None, fase=None):
+    """
+    Calcula las medias de las puntuaciones de las agrupaciones del concurso
+    Parámetros:
+
+    - grupos (dict): diccionario con las modalidades.
+    - *puntuaciones_extra (tuple): puntuaciones adicionales que le tienes que pasar para el resultado final
+    - ag (str, opcional): Nombre de la agrupacion concreta, si no se pasa nada es None
+    - fase (str, opcional): Nombre de la fase en concreto que quieres calcular la media, si no se le pasa es none
+
+    Devuelve:
+    Devuelve un diccionario con la modalidad y la agrupación con la media calculada y redondeada.
+    """
     diccionario_resultado = {}
 
     for nombre_modalidad in grupos:
