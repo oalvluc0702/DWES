@@ -1,7 +1,6 @@
 from producto import Producto, ProductoRebajado, Formacion, total_con_iva
 
 
-# Clase que olvida a propósito el método precio_con_iva
 class ServicioPremium:
     def __init__(self, nombre_servicio, precio):
         self.nombre_servicio = nombre_servicio
