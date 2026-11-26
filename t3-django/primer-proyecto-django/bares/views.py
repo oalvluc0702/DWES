@@ -4,11 +4,11 @@ from django.utils.html import escape
 # Create your views here.
 BARES = [
     
-    {"id": 1, "nombre": "Casa Felipe", "barrio": "La Viña"},
+    {"id": 1, "nombre": "Casa Felipe", "barrio": "La Viña", "plato":"filete"},
     
-    {"id": 2, "nombre": "El Faro", "barrio": "El Pópulo"},
+    {"id": 2, "nombre": "El Faro", "barrio": "El Pópulo", "plato":"pez espada" },
     
-    {"id": 3, "nombre": "Bar Cañailla", "barrio": "La Viña"}
+    {"id": 3, "nombre": "Bar Cañailla", "barrio": "La Viña", "plato":"cañaillas"}
 ]
 def detalle(request: HttpResponse, pk: int):
     
@@ -33,24 +33,29 @@ def listado(request):
     
     return HttpResponse("Aquí irá el listado de bares")
 
-def inspector(request):
-    
+def inspector(request : HttpRequest):
+    """ aparece mi de localhost porque es desde donde estoy realizando la petición y el host es localhost:8000 porque es hacia donde estoy realizando la petición """
     return HttpResponse(
         
         f"method: {request.method}\n"
         
         f"path:   {request.path}\n"
         
-        f"GET:    {dict(request.GET)}\n",
+        f"GET:    {dict(request.GET)}\n"
+        
+        f"REMOTE_ADDR: {request.META['REMOTE_ADDR']}\n"
+
+        f"Host: {request.headers.get('Host','desconocido')}\n",
         
         content_type="text/plain; charset=utf-8",
     
     )
+
 def buscar(request):
     
-    valores = request.GET.getlist("q")
+    valores: list[str]= request.GET.getlist("q")
     
-    termino = valores[0].strip() if valores else ""
+    termino = valores[0].casefold() if valores else ""
     
     if termino == "":
         
@@ -68,3 +73,16 @@ def buscar(request):
     
     return HttpResponse(f"{aviso}<p>Buscando «{escape(termino)}»...</p>")
 
+def plato(request: HttpRequest, pk: int):
+    """Solo recibe un único argumento que es el id, no puede recibir más, y plato/ aporta solo la dirección para que se ejecute la vista."""
+    for bar in BARES:
+        
+        if bar["id"] == pk:
+                
+            return HttpResponse(
+                    
+            f"<h1>{bar['nombre']}</h1><p>Barrio: {bar['barrio']}</p>"
+            f"<p> El plato estrella del bar {bar['id']} es : {bar['plato']}"
+            )
+    
+    return HttpResponseNotFound("No hay ningún bar con ese identificador.")
