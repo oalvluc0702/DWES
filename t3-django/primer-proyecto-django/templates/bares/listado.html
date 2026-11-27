@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block titulo %} Bares - De tapeo por Cádiz {% endblock %}
+{% block contenido %}
+<h1>Bares</h1>
+
+<ul>
+    {% for bar in bares %}
+        <li>
+            <a href="{% url 'detalle' bar.id %}">{{bar.nombre}}</a>- {{bar.plato}}
+        </li>
+        <li> {{bar.nombre}} - {{bar.barrio}} </li>
+    {% empty %}
+
+        <li>Aun no hay bares</li>
+
+    {% endfor %}
+</ul>
+{% endblock %}4

@@ -4,11 +4,11 @@ from django.utils.html import escape
 # Create your views here.
 BARES = [
     
-    {"id": 1, "nombre": "Casa Felipe", "barrio": "La Viña", "plato":"filete"},
+    {"id": 1, "nombre": "Casa Felipe", "barrio": "La Viña", "plato":"filete", "precio": 18.9},
     
-    {"id": 2, "nombre": "El Faro", "barrio": "El Pópulo", "plato":"pez espada" },
+    {"id": 2, "nombre": "El Faro", "barrio": "El Pópulo", "plato":"pez espada", "precio": 20.3},
     
-    {"id": 3, "nombre": "Bar Cañailla", "barrio": "La Viña", "plato":"cañaillas"}
+    {"id": 3, "nombre": "Bar Cañailla", "barrio": "La Viña", "plato":"cañaillas", "precio": 40.4}
 ]
 def detalle(request: HttpResponse, pk: int):
     
@@ -16,11 +16,7 @@ def detalle(request: HttpResponse, pk: int):
         
         if bar["id"] == pk:
                 
-            return HttpResponse(
-                    
-            f"<h1>{bar['nombre']}</h1><p>Barrio: {bar['barrio']}</p>"
-                
-            )
+            return render(request, "bares/detalle.html", {"bar": bar})
     
     return HttpResponseNotFound("No hay ningún bar con ese identificador.")
 
@@ -30,8 +26,8 @@ def portada(request: HttpRequest):
         "<p>Guía de bares del casco antiguo. En obras </p>"
     )
 def listado(request):
-    
-    return HttpResponse("Aquí irá el listado de bares")
+    contexto = {"bares": BARES}
+    return render(request, "bares/listado.html", contexto)
 
 def inspector(request : HttpRequest):
     """ aparece mi de localhost porque es desde donde estoy realizando la petición y el host es localhost:8000 porque es hacia donde estoy realizando la petición """

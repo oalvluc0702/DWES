@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block titulo %} Bares - De tapeo por Cádiz {% endblock %}
+{% block contenido %}
+<h1>{{ bar.nombre }}</h1>
+<p>Barrio: {{ bar.barrio }}</p>
+<p>Especialidad: {{ bar.especialidad }}</p>
+<p>Precio medio: {{ bar.precio }} €</p>
+{% if bar.precio <= 20 %}
+    
+<p>Bar económico.</p>
+{% else %}
+    
+<p>Para darse un homenaje.</p>
+{% endif %}
+<p><a href="{% url 'listado' %}">Volver al listado</a></p>
+{% endblock %}
