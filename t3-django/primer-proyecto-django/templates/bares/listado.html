@@ -6,7 +6,7 @@
 <ul>
     {% for bar in bares %}
         <li>
-            <a href="{% url 'detalle' bar.id %}">{{bar.nombre}}</a>- {{bar.plato}}
+            <a href="{% url 'detalle' bar.id %}">{{bar.nombre}}</a>- {{bar.especialidad}}
         </li>
         <li> {{bar.nombre}} - {{bar.barrio}} </li>
     {% empty %}

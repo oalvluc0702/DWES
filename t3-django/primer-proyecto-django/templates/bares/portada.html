@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block titulo %} Bares - De tapeo por Cádiz {% endblock %}
+{% block contenido %}
+<h1> De tapeo por Cádiz</h1>
+<p>Guía de bares del casco antiguo. numero de bares: {{bares| length}}</p>
+{% for barrio, total in conteo.items %}
+    <p>El barrio: "{{barrio}}" tiene un total de {{total}} bares</p>
+{% empty %}
+    <p>No hay bares todavía</p>
+{% endfor %}
+{% endblock %}

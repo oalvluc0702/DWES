@@ -3,13 +3,19 @@ from django.http import HttpResponse, HttpRequest, HttpResponseNotFound
 from django.utils.html import escape
 # Create your views here.
 BARES = [
-    
-    {"id": 1, "nombre": "Casa Felipe", "barrio": "La Viña", "plato":"filete", "precio": 18.9},
-    
-    {"id": 2, "nombre": "El Faro", "barrio": "El Pópulo", "plato":"pez espada", "precio": 20.3},
-    
-    {"id": 3, "nombre": "Bar Cañailla", "barrio": "La Viña", "plato":"cañaillas", "precio": 40.4}
+    {"id": 1, "nombre": "Casa Felipe", "barrio": "La Viña",
+     "especialidad": "tortillitas de camarones", "precio": 18, "fundado": "2015-06-23"},
+    {"id": 2, "nombre": "El Faro", "barrio": "El Pópulo",
+     "especialidad": "choco frito", "precio": 30, "fundado": "2018-03-20"},
+    {"id": 3, "nombre": "Bar Cañailla", "barrio": "La Viña",
+     "especialidad": "cañailla", "precio": 22, "fundado": "2025-03-27"}
 ]
+def conteo_bares_barrio():
+    conteo = {}
+    for bar in BARES:
+        conteo[bar["barrio"]] = conteo.get(bar["barrio"],0) + 1
+    return conteo
+
 def detalle(request: HttpResponse, pk: int):
     
     for bar in BARES:
@@ -21,16 +27,19 @@ def detalle(request: HttpResponse, pk: int):
     return HttpResponseNotFound("No hay ningún bar con ese identificador.")
 
 def portada(request: HttpRequest):
-    return HttpResponse(
-        "<h1> De tapeo por Cádiz</h1>"
-        "<p>Guía de bares del casco antiguo. En obras </p>"
-    )
+    """ al principio los bares viajan escapados y con el safe"""
+    conteo = conteo_bares_barrio()
+    contexto = {"bares": BARES,
+                "conteo": conteo}
+    return render(request, "bares/portada.html",contexto)
+
 def listado(request):
+    """ Cuando no tiene el safe los caracteres no se escapan por lo cual es como si estuvieran con los caracteres tal cual los metes y el navegador los interpreta como etiquetas si fuera el caso, y cuando pones el safe los caracteres llegan escapados, por lo cual ya no contarían por ejemplo como etiquetas""" 
     contexto = {"bares": BARES}
     return render(request, "bares/listado.html", contexto)
 
 def inspector(request : HttpRequest):
-    """ aparece mi de localhost porque es desde donde estoy realizando la petición y el host es localhost:8000 porque es hacia donde estoy realizando la petición """
+    """ aparece mi IP de localhost porque es desde donde estoy realizando la petición y el host es localhost:8000 porque es hacia donde estoy realizando la petición """
     return HttpResponse(
         
         f"method: {request.method}\n"
@@ -78,7 +87,7 @@ def plato(request: HttpRequest, pk: int):
             return HttpResponse(
                     
             f"<h1>{bar['nombre']}</h1><p>Barrio: {bar['barrio']}</p>"
-            f"<p> El plato estrella del bar {bar['id']} es : {bar['plato']}"
+            f"<p> El plato estrella del bar {bar['id']} es : {bar['especialidad']}"
             )
     
     return HttpResponseNotFound("No hay ningún bar con ese identificador.")
